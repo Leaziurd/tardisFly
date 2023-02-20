@@ -3,18 +3,15 @@ package org.theplaceholder.tardisfly;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.command.impl.ExecuteCommand;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.tardis.mod.enums.EnumDoorState;
 import net.tardis.mod.helper.TardisHelper;
 import net.tardis.mod.helper.WorldHelper;
-import net.tardis.mod.tileentities.exteriors.ExteriorTile;
 import org.theplaceholder.tardisfly.cap.Capabilities;
 import org.theplaceholder.tardisfly.cap.fly.PlayerTardisFlyCapability;
 

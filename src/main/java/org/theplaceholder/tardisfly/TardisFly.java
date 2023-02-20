@@ -14,6 +14,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
@@ -23,12 +24,11 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.tardis.mod.helper.TardisHelper;
 import net.tardis.mod.helper.WorldHelper;
-import net.tardis.mod.tileentities.ConsoleTile;
-import net.tardis.mod.tileentities.console.misc.ExteriorPropertyManager;
-import net.tardis.mod.tileentities.exteriors.ExteriorTile;
 import org.theplaceholder.tardisfly.cap.Capabilities;
 import org.theplaceholder.tardisfly.cap.fly.IPlayerTardisFly;
 import org.theplaceholder.tardisfly.cap.fly.PlayerTardisFlyCapability;
+import org.theplaceholder.tardisfly.cap.tfly.ITardisFly;
+import org.theplaceholder.tardisfly.cap.tfly.TardisFlyCapability;
 
 import java.util.Objects;
 
@@ -51,10 +51,19 @@ public class TardisFly {
     public static class ForgeEvents {
 
         @SubscribeEvent
-        public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+        public static void onEntityAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
             if (event.getObject() instanceof PlayerEntity) {
                 if (!event.getObject().getCapability(Capabilities.PLAYER_TARDIS_FLY).isPresent()) {
                     event.addCapability(new ResourceLocation("tardisfly", "fly_cap"), new IPlayerTardisFly.Provider(new PlayerTardisFlyCapability()));
+                }
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public static void onWorldAttachCapabilities(AttachCapabilitiesEvent<World> event) {
+            if (event.getObject() instanceof ServerWorld) {
+                if (!event.getObject().getCapability(Capabilities.TARDIS_FLY).isPresent() && TardisHelper.getConsoleInWorld(event.getObject()).isPresent()){
+                    event.addCapability(new ResourceLocation("tardisfly", "fly_cap"), new ITardisFly.Provider(new TardisFlyCapability()));
                 }
             }
         }
