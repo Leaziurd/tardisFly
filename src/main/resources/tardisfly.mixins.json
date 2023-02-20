@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.theplaceholder.tardisfly.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "AbstractControlMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
