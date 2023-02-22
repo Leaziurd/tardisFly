@@ -11,15 +11,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.tardis.mod.enums.EnumDoorState;
 import net.tardis.mod.helper.TardisHelper;
 import net.tardis.mod.helper.WorldHelper;
-import net.tardis.mod.tileentities.ConsoleTile;
 import org.theplaceholder.tardisfly.cap.Capabilities;
 import org.theplaceholder.tardisfly.cap.fly.PlayerTardisFlyCapability;
-import org.theplaceholder.tardisfly.network.TardisFlyPacket;
-import org.theplaceholder.tardisfly.utils.ExteriorsIDs;
 
 import java.util.Objects;
 
@@ -31,25 +27,23 @@ public class FlyPanelBlock extends Block {
 
     @Override
     public ActionResultType use(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult brtr){
-        if(!world.isClientSide){
-            if(TardisHelper.getConsoleInWorld(world).isPresent()){
-                ConsoleTile console = TardisHelper.getConsoleInWorld(world).get();
-                PlayerTardisFlyCapability cap = (PlayerTardisFlyCapability) Capabilities.getPlayerTardisFlyCapability(player);
-                if ((Objects.equals(cap.getTardisID(), "0") || cap.getTardisID() == null)) {
-                    if (!console.isInFlight()) {
-                        TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new TardisFlyPacket(player.getUUID(), ExteriorsIDs.getExteriorID(TardisHelper.getConsoleInWorld(world).get())));
 
+            if ((Objects.equals(cap.getTardisID(), "0") || cap.getTardisID() == null)) {
+                TardisHelper.getConsoleInWorld(world).ifPresent(console -> {
+                    BlockPos blockPos = console.getCurrentLocation();
+                    if (!console.isInFlight()) {
                         cap.setTardisID(world.dimension().location().getPath());
+
                         cap.setTardisX((int) player.getX());
                         cap.setTardisY((int) player.getY());
                         cap.setTardisZ((int) player.getZ());
-
+                        
                         cap.setTardisYaw((int) player.yRot);
                         cap.setTardisPitch((int) player.xRot);
 
-                        BlockPos blockPos = console.getCurrentLocation();
-                        WorldHelper.teleportEntities(player, world.getServer().getLevel(console.getCurrentDimension()), blockPos, 0, 0);
+                        cap.setTardisExteriorID(ExteriorsIDs.getExteriorID(console));
 
+                        WorldHelper.teleportEntities(player, world.getServer().getLevel(console.getCurrentDimension()), blockPos, 0, 0);
                         console.getExteriorType().remove(console);
 
                         console.getDoor().ifPresent(door -> door.setOpenState(EnumDoorState.CLOSED));
@@ -57,8 +51,7 @@ public class FlyPanelBlock extends Block {
 
                         Minecraft.getInstance().options.setCameraType(PointOfView.THIRD_PERSON_BACK);
                     }
-                }
-
+                });
             }
         }
         return ActionResultType.SUCCESS;

@@ -7,9 +7,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.theplaceholder.tardisfly.cap.Capabilities;
-
-import java.util.Objects;
 
 @Mixin(value = AbstractControl.class, remap = false)
 public class AbstractControlMixin {
@@ -25,10 +22,7 @@ public class AbstractControlMixin {
     }
 
     private void cancelIfFlying(ConsoleTile console, CallbackInfoReturnable<Boolean> cir) {
-        console.getLevel().getCapability(Capabilities.TARDIS_FLY).ifPresent((cap) -> {
-            if (cap.getFlyingPlayerUUID() != null && !Objects.equals(cap.getFlyingPlayerUUID(), "0")) {
-                cir.setReturnValue(true);
-            }
-        });
+        //if(---)
+            cir.cancel();
     }
 }

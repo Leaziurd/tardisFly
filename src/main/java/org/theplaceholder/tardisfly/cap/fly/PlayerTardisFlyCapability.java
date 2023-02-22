@@ -1,9 +1,10 @@
 package org.theplaceholder.tardisfly.cap.fly;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
 
 public class PlayerTardisFlyCapability implements IPlayerTardisFly {
-    private String tardisID = "0";
+    private String tardisID;
 
     private int tardisX;
     private int tardisY;
@@ -14,6 +15,12 @@ public class PlayerTardisFlyCapability implements IPlayerTardisFly {
     @Override
     public String getTardisID() {
         return tardisID;
+    }
+
+    public void setTardisXYZFromBlockPos(BlockPos pos) {
+        setTardisX(pos.getX());
+        setTardisY(pos.getY());
+        setTardisZ(pos.getZ());
     }
 
     @Override
