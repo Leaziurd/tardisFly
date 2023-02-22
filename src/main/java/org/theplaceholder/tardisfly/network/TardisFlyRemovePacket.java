@@ -11,8 +11,6 @@ import java.util.function.Supplier;
 public class TardisFlyRemovePacket {
     private String uuid;
 
-    public ConsoleTile consoleTile;
-
     public TardisFlyRemovePacket(UUID uuid) {
         this(uuid.toString());
     }

@@ -9,6 +9,7 @@ import net.tardis.mod.client.models.exteriors.PoliceBoxExteriorModel;
 import net.tardis.mod.client.renderers.exteriors.*;
 import net.tardis.mod.tileentities.ConsoleTile;
 import net.tardis.mod.tileentities.exteriors.*;
+import org.lwjgl.system.CallbackI;
 import org.theplaceholder.tardisfly.cap.Capabilities;
 
 public class ExteriorsIDs {
@@ -45,36 +46,32 @@ public class ExteriorsIDs {
         return -1;
     }
 
-    public static void render(PlayerEntity player, MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, float partialTicks){
-        int packedOverlay = 0;
-        player.getCapability(Capabilities.PLAYER_TARDIS_FLY).ifPresent(fly -> {
-            int id = fly.getTardisExteriorID();
+    public static void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, float partialTicks, int id){
             if(id == 0)
-                new ClockExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new ClockExteriorRenderer(null).renderExterior(new ClockExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 1)
-                new SteamExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new SteamExteriorRenderer(null).renderExterior(new SteampunkExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 2)
-                new TrunkExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new TrunkExteriorRenderer(null).renderExterior(new TrunkExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 3)
-                new TelephoneExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new TelephoneExteriorRenderer(null).renderExterior(new TelephoneExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 4)
-                new PoliceBoxExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new PoliceBoxExteriorRenderer(null).renderExterior(new PoliceBoxExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 5)
-                new FortuneExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new FortuneExteriorRenderer(null).renderExterior(new FortuneExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 6)
-                new ModernPoliceBoxExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new ModernPoliceBoxExteriorRenderer(null).renderExterior(new ModernPoliceBoxExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 7)
-                new SafeExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new SafeExteriorRenderer(null).renderExterior(new SafeExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 8)
-                new TTCapsuleExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new TTCapsuleExteriorRenderer(null).renderExterior(new TTCapsuleExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 9)
-                new TT2020CapsuleExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new TT2020CapsuleExteriorRenderer(null).renderExterior(new TT2020ExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 10)
-                new JapanExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new JapanExteriorRenderer(null).renderExterior(new JapanExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 11)
-                new ApertureExteriorRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
+                new ApertureExteriorRenderer(null).renderExterior(new ApertureExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
             if(id == 12)
-                new DisguiseExteriorTileRenderer(null).renderExterior(null, partialTicks, stack, buffer, packedLight, packedOverlay, 1f);
-        });
+                new DisguiseExteriorTileRenderer(null).renderExterior(new DisguiseExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
     }
 }
