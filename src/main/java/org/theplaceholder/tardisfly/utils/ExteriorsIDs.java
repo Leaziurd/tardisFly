@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.vector.Quaternion;
 import net.tardis.mod.client.models.exteriors.ModernPoliceBoxExteriorModel;
 import net.tardis.mod.client.models.exteriors.PoliceBoxExteriorModel;
 import net.tardis.mod.client.renderers.exteriors.*;
@@ -47,31 +48,55 @@ public class ExteriorsIDs {
     }
 
     public static void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, float partialTicks, int id){
-            if(id == 0)
+        switch (id){
+            case 0:
                 new ClockExteriorRenderer(null).renderExterior(new ClockExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 1)
+                break;
+            case 1:
                 new SteamExteriorRenderer(null).renderExterior(new SteampunkExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 2)
+                break;
+            case 2:
                 new TrunkExteriorRenderer(null).renderExterior(new TrunkExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 3)
+                break;
+            case 3:
                 new TelephoneExteriorRenderer(null).renderExterior(new TelephoneExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 4)
+                break;
+            case 4:
                 new PoliceBoxExteriorRenderer(null).renderExterior(new PoliceBoxExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 5)
+                break;
+            case 5:
                 new FortuneExteriorRenderer(null).renderExterior(new FortuneExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 6)
+                break;
+            case 6:
                 new ModernPoliceBoxExteriorRenderer(null).renderExterior(new ModernPoliceBoxExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 7)
+                break;
+            case 7:
                 new SafeExteriorRenderer(null).renderExterior(new SafeExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 8)
+                break;
+            case 8:
+                translateAndRotate(stack, 1.8f);
                 new TTCapsuleExteriorRenderer(null).renderExterior(new TTCapsuleExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 9)
+                break;
+            case 9:
                 new TT2020CapsuleExteriorRenderer(null).renderExterior(new TT2020ExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 10)
+                break;
+            case 10:
                 new JapanExteriorRenderer(null).renderExterior(new JapanExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 11)
+                break;
+            case 11:
                 new ApertureExteriorRenderer(null).renderExterior(new ApertureExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
-            if(id == 12)
+                break;
+            case 12:
                 new DisguiseExteriorTileRenderer(null).renderExterior(new DisguiseExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
+                break;
+        }
+    }
+
+    private static float rotate;
+
+    public static void translateAndRotate(MatrixStack stack, float up){
+        rotate = rotate + 0.5f;
+        stack.translate(0, up, 0);
+        stack.mulPose(new Quaternion(0, rotate, 0, true));
     }
 }
