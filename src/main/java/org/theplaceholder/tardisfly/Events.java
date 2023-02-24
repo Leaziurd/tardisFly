@@ -57,11 +57,11 @@ public class Events {
                 if (event.player.isCrouching() && event.player.isOnGround()) {
                     event.player.getCapability(Capabilities.PLAYER_TARDIS_FLY).ifPresent(cap -> {
                         if (cap.getTardisID() != null && !Objects.equals(cap.getTardisID(), "0")) {
-                            Minecraft.getInstance().options.setCameraType(PointOfView.FIRST_PERSON);
 
                             ServerWorld tWorld = event.player.level.getServer().getLevel(WorldHelper.getWorldKeyFromRL(new ResourceLocation("tardis", cap.getTardisID())));
 
                             TardisHelper.getConsoleInWorld(tWorld).ifPresent((console) -> {
+                                Minecraft.getInstance().options.setCameraType(PointOfView.FIRST_PERSON);
                                 console.setDestination(event.player.level.dimension(), event.player.blockPosition());
                                 console.setCurrentLocation(event.player.level.dimension(), event.player.blockPosition());
 
@@ -104,6 +104,7 @@ public class Events {
                         BlockPos blockPos = new BlockPos(cap.getTardisX(), cap.getTardisY(), cap.getTardisZ());
                         WorldHelper.teleportEntities( event.getPlayer(), (ServerWorld) world, blockPos, cap.getTardisYaw(), cap.getTardisPitch());
                         world.getCapability(Capabilities.TARDIS_FLY).ifPresent(capability -> capability.setFlyingPlayerUUID("0"));
+
 
                         TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new TardisFlyRemovePacket(event.getPlayer().getUUID()));
                         Vars.playerExteriorMap.remove(event.getPlayer().getUUID().toString());
