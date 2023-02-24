@@ -18,6 +18,7 @@ import net.tardis.mod.helper.WorldHelper;
 import net.tardis.mod.tileentities.ConsoleTile;
 import org.theplaceholder.tardisfly.cap.Capabilities;
 import org.theplaceholder.tardisfly.cap.fly.PlayerTardisFlyCapability;
+import org.theplaceholder.tardisfly.cap.tfly.TardisFlyCapability;
 import org.theplaceholder.tardisfly.network.TardisFlyPacket;
 import org.theplaceholder.tardisfly.utils.ExteriorsIDs;
 
@@ -35,10 +36,11 @@ public class FlyPanelBlock extends Block {
             if(TardisHelper.getConsoleInWorld(world).isPresent()){
                 ConsoleTile console = TardisHelper.getConsoleInWorld(world).get();
                 PlayerTardisFlyCapability cap = (PlayerTardisFlyCapability) Capabilities.getPlayerTardisFlyCapability(player);
-                if ((Objects.equals(cap.getTardisID(), "0") || cap.getTardisID() == null)) {
-                    if (!console.isInFlight()) {
+                TardisFlyCapability tardisFlyCapability = (TardisFlyCapability) world.getCapability(Capabilities.TARDIS_FLY).orElse(null);
+                if ((Objects.equals(cap.getTardisID(), "0") || cap.getTardisID() == null) && tardisFlyCapability != null) {
+                    if (!console.isInFlight() && Objects.equals(tardisFlyCapability.getFlyingPlayerUUID(), "0")) {
                         TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new TardisFlyPacket(player.getUUID(), ExteriorsIDs.getExteriorID(TardisHelper.getConsoleInWorld(world).get())));
-
+                        Vars.playerExteriorMap.put(player.getUUID().toString(), ExteriorsIDs.getExteriorID(TardisHelper.getConsoleInWorld(world).get()));
                         cap.setTardisID(world.dimension().location().getPath());
                         cap.setTardisX((int) player.getX());
                         cap.setTardisY((int) player.getY());

@@ -4,13 +4,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
 public class PlayerTardisFlyCapability implements IPlayerTardisFly {
-    private String tardisID;
+    private String tardisID = "0";
 
-    private int tardisX;
-    private int tardisY;
-    private int tardisZ;
-    private int tardisYaw;
-    private int tardisPitch;
+    private int tardisX = 0;
+    private int tardisY = 0;
+    private int tardisZ = 0;
+    private int tardisYaw = 0;
+    private int tardisPitch = 0;
 
     @Override
     public String getTardisID() {

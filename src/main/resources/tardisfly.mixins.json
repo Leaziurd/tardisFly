@@ -6,8 +6,11 @@
   "mixins": [
     "AbstractControlMixin"
   ],
-  "client": [],
+  "client": [
+    "client.GameSettingsMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "refmap": "tardisfly.mixins.refmap.json"
 }
