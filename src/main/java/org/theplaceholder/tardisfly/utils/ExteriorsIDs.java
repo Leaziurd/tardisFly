@@ -78,7 +78,7 @@ public class ExteriorsIDs {
                 break;
             case 8:
                 translateAndRotate(stack, 1.8f, isOnGround);
-                new TTCapsuleExteriorRenderer(TileEntityRendererDispatcher.instance).renderExterior(new TTCapsuleExteriorTile(), partialTicks, stack, buffer, 1, 1, 1f);
+                        new TTCapsuleExteriorRenderer(TileEntityRendererDispatcher.instance).renderExterior(new TTCapsuleExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
                 break;
             case 9:
                 new TT2020CapsuleExteriorRenderer(TileEntityRendererDispatcher.instance).renderExterior(new TT2020ExteriorTile(), partialTicks, stack, buffer, packedLight, 1, 1f);
