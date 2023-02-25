@@ -10,5 +10,4 @@ import java.util.Map;
 public class ClientVars {
     public static Map<String, Integer> playerExteriorMap = new HashMap<>();
     public static Map<String, Float> playerRotationMap = new HashMap<>();
-    public static int rotationMapLastUpdated = 0;
 }

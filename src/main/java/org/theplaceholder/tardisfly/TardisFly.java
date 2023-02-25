@@ -18,7 +18,8 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.theplaceholder.tardisfly.network.ExteriorRotationPacket;
+import org.theplaceholder.tardisfly.network.ExteriorRotationC2SPacket;
+import org.theplaceholder.tardisfly.network.ExteriorRotationS2CPacket;
 import org.theplaceholder.tardisfly.network.TardisFlyPacket;
 import org.theplaceholder.tardisfly.network.TardisFlyRemovePacket;
 
@@ -53,6 +54,7 @@ public class TardisFly {
         int index = 0;
         NETWORK.registerMessage(index++, TardisFlyPacket.class, TardisFlyPacket::encode, TardisFlyPacket::decode, TardisFlyPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         NETWORK.registerMessage(index++, TardisFlyRemovePacket.class, TardisFlyRemovePacket::encode, TardisFlyRemovePacket::decode, TardisFlyRemovePacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        NETWORK.registerMessage(index++, ExteriorRotationPacket.class, ExteriorRotationPacket::encode, ExteriorRotationPacket::decode, ExteriorRotationPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        NETWORK.registerMessage(index++, ExteriorRotationC2SPacket.class, ExteriorRotationC2SPacket::encode, ExteriorRotationC2SPacket::decode, ExteriorRotationC2SPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        NETWORK.registerMessage(index++, ExteriorRotationS2CPacket.class, ExteriorRotationS2CPacket::encode, ExteriorRotationS2CPacket::decode, ExteriorRotationS2CPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 }

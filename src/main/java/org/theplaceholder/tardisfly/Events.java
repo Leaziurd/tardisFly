@@ -24,8 +24,10 @@ import org.theplaceholder.tardisfly.cap.fly.IPlayerTardisFly;
 import org.theplaceholder.tardisfly.cap.fly.PlayerTardisFlyCapability;
 import org.theplaceholder.tardisfly.cap.tfly.ITardisFly;
 import org.theplaceholder.tardisfly.cap.tfly.TardisFlyCapability;
+import org.theplaceholder.tardisfly.client.ClientVars;
 import org.theplaceholder.tardisfly.interfaces.ExteriorTileMixinInterface;
-import org.theplaceholder.tardisfly.network.ExteriorRotationPacket;
+import org.theplaceholder.tardisfly.network.ExteriorRotationC2SPacket;
+import org.theplaceholder.tardisfly.network.ExteriorRotationS2CPacket;
 import org.theplaceholder.tardisfly.network.TardisFlyPacket;
 import org.theplaceholder.tardisfly.network.TardisFlyRemovePacket;
 
@@ -69,8 +71,12 @@ public class Events {
                                 console.getExteriorType().place(console, event.player.level.dimension(), event.player.blockPosition());
                                 cap.setTardisID("0");
                                 BlockPos blockPos = new BlockPos(cap.getTardisX(), cap.getTardisY(), cap.getTardisZ());
-                                WorldHelper.teleportEntities(event.player, tWorld, blockPos, cap.getTardisYaw(), cap.getTardisPitch());
+                                WorldHelper.teleportEntities(event.player, tWorld, blockPos, c--ap.getTardisYaw(), cap.getTardisPitch());
                                 tWorld.getCapability(Capabilities.TARDIS_FLY).ifPresent(capability -> capability.setFlyingPlayerUUID("0"));
+
+                                console.getOrFindExteriorTile().ifPresent((exteriorTile) -> {
+                                    TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new ExteriorRotationS2CPacket(event.player.getStringUUID(), ClientVars.playerRotationMap.get(event.player.getStringUUID())));
+                                });
 
                                 TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new TardisFlyRemovePacket(event.player.getUUID()));
                                 Vars.playerExteriorMap.remove(event.player.getUUID().toString());
@@ -80,27 +86,6 @@ public class Events {
                         }
                     });
                 }
-            }
-        }
-
-        tick++;
-        if (tick >= 25 && event.player != null){
-            tick = 0;
-            if (!event.player.level.isClientSide) {
-                event.player.level.getEntitiesOfClass(PlayerEntity.class, event.player.getBoundingBox().inflate(75)).forEach(player -> {
-                    if (player != null) {
-                        player.getCapability(Capabilities.PLAYER_TARDIS_FLY).ifPresent(cap -> {
-                            if (cap.getTardisID() != null && !Objects.equals(cap.getTardisID(), "0")) {
-                                ServerWorld tWorld = event.player.level.getServer().getLevel(WorldHelper.getWorldKeyFromRL(new ResourceLocation("tardis", cap.getTardisID())));
-                                if (TardisHelper.getConsoleInWorld(tWorld).isPresent()) {
-                                    TardisHelper.getConsoleInWorld(tWorld).get().getOrFindExteriorTile().ifPresent(exteriorTile -> {
-                                        TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new ExteriorRotationPacket(player.getStringUUID(), ((ExteriorTileMixinInterface)exteriorTile).getRot()));
-                                    });
-                                }
-                            }
-                        });
-                    }
-                });
             }
         }
     }

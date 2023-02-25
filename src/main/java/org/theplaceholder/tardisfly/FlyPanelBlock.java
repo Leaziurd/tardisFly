@@ -19,6 +19,8 @@ import net.tardis.mod.tileentities.ConsoleTile;
 import org.theplaceholder.tardisfly.cap.Capabilities;
 import org.theplaceholder.tardisfly.cap.fly.PlayerTardisFlyCapability;
 import org.theplaceholder.tardisfly.cap.tfly.TardisFlyCapability;
+import org.theplaceholder.tardisfly.interfaces.ExteriorTileMixinInterface;
+import org.theplaceholder.tardisfly.network.ExteriorRotationS2CPacket;
 import org.theplaceholder.tardisfly.network.TardisFlyPacket;
 import org.theplaceholder.tardisfly.utils.ExteriorsIDs;
 
@@ -57,10 +59,13 @@ public class FlyPanelBlock extends Block {
                         console.getDoor().ifPresent(door -> door.setOpenState(EnumDoorState.CLOSED));
                         world.getCapability(Capabilities.TARDIS_FLY).ifPresent(capability -> capability.setFlyingPlayerUUID(player.getUUID().toString()));
 
+                        console.getOrFindExteriorTile().ifPresent(tile -> {
+                            TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new ExteriorRotationS2CPacket(player.getUUID().toString(), ((ExteriorTileMixinInterface)tile).getRot()));
+                        });
+
                         Minecraft.getInstance().options.setCameraType(PointOfView.THIRD_PERSON_BACK);
                     }
                 }
-
             }
         }
         return ActionResultType.SUCCESS;

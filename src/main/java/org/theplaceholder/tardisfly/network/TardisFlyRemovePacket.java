@@ -2,7 +2,9 @@ package org.theplaceholder.tardisfly.network;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.tardis.mod.tileentities.ConsoleTile;
+import org.theplaceholder.tardisfly.TardisFly;
 import org.theplaceholder.tardisfly.client.ClientVars;
 
 import java.util.UUID;
@@ -31,6 +33,7 @@ public class TardisFlyRemovePacket {
     public static void handle(TardisFlyRemovePacket msg, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             ClientVars.playerExteriorMap.remove(msg.uuid);
+            TardisFly.NETWORK.sendToServer(new ExteriorRotationC2SPacket(msg.uuid, ClientVars.playerRotationMap.get(msg.uuid)));
         });
     }
 }

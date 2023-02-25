@@ -101,18 +101,19 @@ public class ExteriorsIDs {
     }
 
     public static void translateAndRotate(String uuid, MatrixStack stack, float up, boolean isOnGround){
-        if (ClientVars.rotationMapLastUpdated > 0)
-            ClientVars.playerRotationMap.put(uuid, ClientVars.playerRotationMap.get(uuid) + 1.5f);
-
-        ClientVars.rotationMapLastUpdated++;
 
         stack.translate(0, up, 0);
         if(!isOnGround) {
             translateFloating(stack);
+            if (ClientVars.playerRotationMap.get(uuid) == null)
+                ClientVars.playerRotationMap.put(uuid, 0f);
+
+            float rot = ClientVars.playerRotationMap.get(uuid);
+            if (rot >= 360)
+                ClientVars.playerRotationMap.put(uuid, 0f);
+            ClientVars.playerRotationMap.put(uuid, ClientVars.playerRotationMap.get(uuid) + 1.5f);
         }
-        else {
-            stack.mulPose(new Quaternion(0, ClientVars.playerRotationMap.get(uuid), 0, true));
-        }
+        stack.mulPose(new Quaternion(0, ClientVars.playerRotationMap.get(uuid), 0, true));
     }
 
     public static void translateFloating(MatrixStack matrix){
