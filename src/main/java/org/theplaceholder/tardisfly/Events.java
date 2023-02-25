@@ -71,7 +71,7 @@ public class Events {
                                 console.getExteriorType().place(console, event.player.level.dimension(), event.player.blockPosition());
                                 cap.setTardisID("0");
                                 BlockPos blockPos = new BlockPos(cap.getTardisX(), cap.getTardisY(), cap.getTardisZ());
-                                WorldHelper.teleportEntities(event.player, tWorld, blockPos, c--ap.getTardisYaw(), cap.getTardisPitch());
+                                WorldHelper.teleportEntities(event.player, tWorld, blockPos, cap.getTardisYaw(), cap.getTardisPitch());
                                 tWorld.getCapability(Capabilities.TARDIS_FLY).ifPresent(capability -> capability.setFlyingPlayerUUID("0"));
 
                                 console.getOrFindExteriorTile().ifPresent((exteriorTile) -> {
