@@ -18,35 +18,7 @@ public class ClientEvents {
 
             int i = ClientVars.playerExteriorMap.get(event.getEntity().getUUID().toString());
 
-            ExteriorsIDs.render(event.getMatrixStack(), event.getBuffers(), event.getLight(), event.getPartialRenderTick(), i, event.getEntity().isOnGround());
-        }
-    }
-
-    private static boolean isAscending = false;
-    @SubscribeEvent
-    public static void onLivingRender(TickEvent.PlayerTickEvent event) {
-        ExteriorsIDs.rotate += 1.5f;
-        if (ExteriorsIDs.floatHeight >= 0.25) {
-            isAscending = false;
-        }
-        if (ExteriorsIDs.floatHeight <= -0.25) {
-            isAscending = true;
-        }
-
-        if (isAscending) {
-            if(ExteriorsIDs.floatHeight > 0.20){
-                ExteriorsIDs.floatHeight += 0.005f;
-            }
-            else {
-                ExteriorsIDs.floatHeight += 0.01f;
-            }
-        } else {
-            if(ExteriorsIDs.floatHeight < -0.20){
-                ExteriorsIDs.floatHeight -= 0.005f;
-            }
-            else {
-                ExteriorsIDs.floatHeight -= 0.01f;
-            }
+            ExteriorsIDs.render(event.getEntity().getUUID().toString(), event.getMatrixStack(), event.getBuffers(), event.getLight(), event.getPartialRenderTick(), i, event.getEntity().isOnGround());
         }
     }
 }

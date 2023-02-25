@@ -1,4 +1,4 @@
-package org.theplaceholder.tardisfly.mixins;
+package org.theplaceholder.tardisfly.mixins.tardis;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.tardis.mod.controls.AbstractControl;

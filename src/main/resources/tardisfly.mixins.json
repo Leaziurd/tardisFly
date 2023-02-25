@@ -4,7 +4,8 @@
   "package": "org.theplaceholder.tardisfly.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AbstractControlMixin"
+    "tardis.AbstractControlMixin",
+    "tardis.ExteriorTileMixin"
   ],
   "client": [
     "client.GameSettingsMixin"

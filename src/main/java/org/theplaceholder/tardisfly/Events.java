@@ -24,6 +24,8 @@ import org.theplaceholder.tardisfly.cap.fly.IPlayerTardisFly;
 import org.theplaceholder.tardisfly.cap.fly.PlayerTardisFlyCapability;
 import org.theplaceholder.tardisfly.cap.tfly.ITardisFly;
 import org.theplaceholder.tardisfly.cap.tfly.TardisFlyCapability;
+import org.theplaceholder.tardisfly.interfaces.ExteriorTileMixinInterface;
+import org.theplaceholder.tardisfly.network.ExteriorRotationPacket;
 import org.theplaceholder.tardisfly.network.TardisFlyPacket;
 import org.theplaceholder.tardisfly.network.TardisFlyRemovePacket;
 
@@ -51,7 +53,7 @@ public class Events {
     }
 
     @SubscribeEvent
-    public static void onPlayerSneak(TickEvent.PlayerTickEvent event) {
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.player != null){
             if (!event.player.level.isClientSide) {
                 if (event.player.isCrouching() && event.player.isOnGround()) {
@@ -61,7 +63,6 @@ public class Events {
                             ServerWorld tWorld = event.player.level.getServer().getLevel(WorldHelper.getWorldKeyFromRL(new ResourceLocation("tardis", cap.getTardisID())));
 
                             TardisHelper.getConsoleInWorld(tWorld).ifPresent((console) -> {
-                                Minecraft.getInstance().options.setCameraType(PointOfView.FIRST_PERSON);
                                 console.setDestination(event.player.level.dimension(), event.player.blockPosition());
                                 console.setCurrentLocation(event.player.level.dimension(), event.player.blockPosition());
 
@@ -73,10 +74,33 @@ public class Events {
 
                                 TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new TardisFlyRemovePacket(event.player.getUUID()));
                                 Vars.playerExteriorMap.remove(event.player.getUUID().toString());
+
+                                Minecraft.getInstance().options.setCameraType(PointOfView.FIRST_PERSON);
                             });
                         }
                     });
                 }
+            }
+        }
+
+        tick++;
+        if (tick >= 25 && event.player != null){
+            tick = 0;
+            if (!event.player.level.isClientSide) {
+                event.player.level.getEntitiesOfClass(PlayerEntity.class, event.player.getBoundingBox().inflate(75)).forEach(player -> {
+                    if (player != null) {
+                        player.getCapability(Capabilities.PLAYER_TARDIS_FLY).ifPresent(cap -> {
+                            if (cap.getTardisID() != null && !Objects.equals(cap.getTardisID(), "0")) {
+                                ServerWorld tWorld = event.player.level.getServer().getLevel(WorldHelper.getWorldKeyFromRL(new ResourceLocation("tardis", cap.getTardisID())));
+                                if (TardisHelper.getConsoleInWorld(tWorld).isPresent()) {
+                                    TardisHelper.getConsoleInWorld(tWorld).get().getOrFindExteriorTile().ifPresent(exteriorTile -> {
+                                        TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new ExteriorRotationPacket(player.getStringUUID(), ((ExteriorTileMixinInterface)exteriorTile).getRot()));
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
     }
@@ -84,7 +108,7 @@ public class Events {
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
         Vars.playerExteriorMap.forEach((uuid, exterior) -> {
-            TardisFly.NETWORK.send(PacketDistributor.PLAYER.with((Supplier<ServerPlayerEntity>) event.getPlayer()), new TardisFlyPacket(event.getPlayer().getUUID(), exterior));
+            TardisFly.NETWORK.send(PacketDistributor.ALL.noArg(), new TardisFlyPacket(event.getPlayer().getUUID(), exterior));
         });
     }
 
@@ -115,4 +139,6 @@ public class Events {
             }
         }
     }
+
+    private static int tick = 0;
 }
